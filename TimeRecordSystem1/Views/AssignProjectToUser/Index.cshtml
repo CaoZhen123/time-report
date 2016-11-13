@@ -1,0 +1,25 @@
+﻿@model List<TimeRecordSystem1.ViewModels.AssignProjectToUserViewModel>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+<p>
+    @Html.ActionLink("Create New", "Create", "AssignProjectToUser", null, new { @class = "btn btn-info" })
+</p>
+<ul>
+    @foreach (var assignProjectToUserViewModel in Model)
+    {
+        <li>
+            @assignProjectToUserViewModel.Project.ProjectName
+            <ul>
+                @foreach (var user in assignProjectToUserViewModel.Users)
+                {
+                    <li>@user.UserName</li>
+                }
+            </ul>
+        </li>
+
+    }
+</ul>

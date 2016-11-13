@@ -1,0 +1,23 @@
+﻿@model TimeRecordSystem1.ViewModels.AssignProjectToUserCreationViewModel
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create Team</h2>
+
+@using (Html.BeginForm("Save", "AssignProjectToUser"))
+{
+
+    <div class="form-group">
+        <label for="ProjectId">Project</label><br />
+        @Html.DropDownListFor(m => m.SelectedProjectId, new SelectList(Model.AllProjects, "Id", "ProjectName"), new { @class = "selectpicker" })
+    </div>
+    <div class="form-group">
+        <label for="SelectedUsers">Team Members</label><br />
+        @Html.ListBoxFor(x => x.SelectedUserIds, new SelectList(Model.AllUsers, "Id", "UserName"), new { @class = "selectpicker" })
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+}

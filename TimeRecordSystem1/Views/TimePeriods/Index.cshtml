@@ -1,0 +1,95 @@
+﻿@model IEnumerable<TimeRecordSystem1.Models.TimePeriod>
+
+@{
+    ViewBag.Title = "Time Period";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create","TimePeriods", null, new { @class = "btn btn-info" })
+</p>
+<table id="timePeriods" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>
+                Id
+            </th>
+            <th>
+                Start Date
+            </th>
+            <th>
+                End Date
+            </th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+
+    <tbody>
+       
+    </tbody> 
+      
+
+</table>
+@section scripts
+{
+
+    <script>
+
+        $(document)
+            .ready(function() {
+
+                var table = $("#timePeriods").DataTable({
+
+                        ajax: {
+
+                            url: "/api/timePeriods",
+                            dataSrc:""
+                        },
+                        columns: [
+
+                            {
+                                data: "id",
+                                render: function (data, type, timePeriod) {
+
+                                    return "<a href='/TimePeriods/Edit/" + timePeriod.id + "'>" + timePeriod.id + "</a>";
+                                }
+                            },
+                            {
+                                data:"startDate"
+                            },
+                            {
+                                data:"endDate"
+                            },
+                            {
+                                data: "id",
+                                render: function (data) {
+                                    return "<button class='btn-link js-delete' data-timePeriod-id=" + data + ">Delete</button>";
+                                }
+                            }
+                        ]
+                    });
+
+                $("#timePeriods").on("click", ".js-delete", function () {
+
+                    var button = $(this);
+
+                    bootbox.confirm("Are you sure you want to delete this time period?", function (result) {
+
+                        if (result) {
+
+                            $.ajax({
+                                url: "/api/timePeriods/" + button.attr("data-timePeriod-id"),
+                                method: "DELETE",
+                                success: function () {
+                                    table.row(button.parents("tr")).remove().draw();
+                                }
+                            });
+                        }
+                    });
+                });
+            });
+    </script>
+
+}

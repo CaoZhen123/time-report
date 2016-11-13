@@ -1,0 +1,54 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/LoginWithRegister.cshtml";
+}
+
+
+<form class="form-signin" action="">
+    <h1>ADSI</h1>
+    <h2 class="form-signin-heading">Please sign in</h2>
+    <label class="sr-only">User Id</label>
+    <input type="email" id="id" class="form-control" placeholder="User Id" required autofocus>
+    <label class="sr-only">Password</label>
+    <input type="password" id="password" class="form-control" placeholder="Password" required>
+
+    <a href="javascript:void(0)" id="login" role="button" class="btn btn-primary">Login</a><br>
+</form>
+
+@section scripts
+{
+
+    <script>
+        $(document)
+            .ready(function() {
+                $("#login")
+                    .on('click',
+                        function() {
+                            var data = {
+                                id: $('#id').val(),
+                                password: $('#password').val()
+                            };
+                            $.ajax({
+                                url: 'ConfirmLogin',
+                                data: data,
+                                success: function(result) {
+                                    if (result == "0") {
+                                        alert("the user is not exist!!");
+                                    }
+                                    if (result == "1") {
+                                        alert("Password is wrong");
+                                    }
+                                    if (result == "2") {
+                                        location.href = '/Users/Index';
+                                    }
+                                    if (result == "3") {
+                                        location.href = '/First/Employee';
+                                    }
+
+                                }
+                            });
+                        });
+            });
+    </script>
+}

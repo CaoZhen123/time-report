@@ -1,0 +1,115 @@
+﻿@model IEnumerable<TimeRecordSystem1.Models.User>
+
+@{
+    ViewBag.Title = "User";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create","Users", null, new { @class = "btn btn-info" })
+    
+</p>
+<table id="users" class="table table-bordered table-hover">
+    <thead>
+
+    <tr>
+        <th>
+            Id
+        </th>
+        <th>
+            User Name
+        </th>
+        <th>
+            First Name
+        </th>
+        <th>
+            Last Name
+        </th>
+        <th>
+            E-mail
+        </th>
+        <th>
+            Delete
+        </th>
+        
+    </tr>
+    </thead>
+
+    <tbody>
+
+    </tbody>
+
+
+    
+</table>
+
+@section scripts
+{
+
+    <script>
+
+        $(document)
+            .ready(function() {
+
+                var table = $("#users")
+                    .DataTable({
+                        ajax: {
+                            url: "/api/users",
+                            dataSrc: ""
+                        },
+                        columns: [
+                        {
+                            data: "id",
+                            render: function(data, type, user) {
+                                return "<a href='/Users/Edit/" + user.id + "'>" + user.id + "</a>";
+                            }
+                        },
+                        {
+                            data: "userName"
+                        },
+                        {
+                            data: "firstName"
+                        },
+                        {
+                            data: "lastName"
+                        },
+                        {
+                            data: "email"
+                        },
+                        
+                        {
+                        data: "id",
+                        render: function(data) {
+                            return "<button class='btn-link js-delete' data-user-id=" + data + ">Delete</button>";
+                        }
+                    }
+                ]
+            });
+
+        $("#users")
+            .on("click",
+                ".js-delete",
+                function() {
+
+                    var button = $(this);
+
+                    bootbox.confirm("Are you sure you want to delete this user?",
+                        function(result) {
+
+                            if (result) {
+
+                                $.ajax({
+                                    url: "/api/users/" + button.attr("data-user-id"),
+                                    method: "DELETE",
+                                    success: function() {
+                                        table.row(button.parents("tr")).remove().draw();
+                                    }
+                                });
+                            }
+                        });
+                });
+        });
+    </script>
+}

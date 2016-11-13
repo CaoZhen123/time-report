@@ -1,0 +1,118 @@
+﻿@using TimeRecordSystem1.Models
+@model TimeRecordSystem1.ViewModels.TimeEntryCreationViewModel
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create</h2>
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>TimeEntry</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.TimeEntry.Date, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3 date">
+                <div class="input-group date" id="datePicker">
+                    @Html.EditorFor(model => model.TimeEntry.Date, new { htmlAttributes = new { @class = "form-control" } })
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-th"></span>
+                    </div>
+                </div>
+                    @Html.ValidationMessageFor(model => model.TimeEntry.Date, "", new { @class = "text-danger" })
+                </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.TimeEntry.Project, htmlAttributes: new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.DropDownListFor(m => m.SeletctedProjectId, new SelectList(Model.Projects, "Id", "ProjectName"), "Please select a project", new {@class = "form-control"})
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.TimeEntry.User, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(m => m.SelectedUserId, new SelectList(Model.Users, "Id", "UserName"), "Please select a user", new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.TimeEntry.WorkTime, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.TimeEntry.WorkTime, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.TimeEntry.WorkTime, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TimeEntry.Comment, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.TimeEntry.Comment, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.TimeEntry.Comment, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TimeEntry.Status, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EnumDropDownListFor(model => model.TimeEntry.Status, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.TimeEntry.Status, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        
+        $(document).ready(function () {
+            $('#datePicker')
+                .datepicker({
+                    format: 'mm/dd/yyyy'
+                })
+                .on('changeDate', function (e) {
+                    // Revalidate the date field
+                    $('#eventForm').formValidation('revalidateField', 'date');
+                });
+           
+            $('#eventForm').formValidation({
+                framework: 'bootstrap',
+                icon: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    date: {
+                        validators: {
+                            notEmpty: {
+                                message: 'The date is required'
+                            },
+                            date: {
+                                format: 'MM/DD/YYYY',
+                                message: 'The date is not a valid'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}
